@@ -1,9 +1,5 @@
-from random import normalvariate
-from numpy.linalg import norm
-
 import numpy as np
-from math import sqrt
-
+import svd_algo.svd as svd
 
 def svd_shuffle(matrix):
     """
@@ -58,11 +54,11 @@ def process_svd(matrix, block_size=16):
 
             # print()
 
-        # print("row: ", row)
+        # print ("row: ", row)
         X.append(row)
 
     print("X: ", X)
-    # print(svd(np.array(X)))
+    print(svd.svd(np.array(X)))
 
 
 if __name__ == "__main__":
