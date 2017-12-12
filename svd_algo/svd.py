@@ -77,9 +77,9 @@ if __name__ == "__main__":
         [1, 2],
     ])
 
-    u, s, v = svd(matrix)
+    # u, s, v = svd(matrix)
     # print(u)
     # print(s)
     # print(v)
 
-    print(u.dot(s).dot(v.T))
+    # print(u.dot(s).dot(v.T))
