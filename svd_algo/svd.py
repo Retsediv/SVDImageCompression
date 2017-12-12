@@ -1,13 +1,16 @@
 import numpy as np
 from math import sqrt
+import math
 
 
 def compute_sigma(evalues, m, n):
-    sigma = np.ndarray((m, n))
-
     sigma = np.zeros((m, n))
-    for i in range(len(sigma)):
-        sigma[i][i] = np.math.sqrt(evalues[i])
+
+    for i in range(m):
+        try:
+            sigma[i, i] = evalues[i]**0.5
+        except IndexError as e:
+            continue
 
     return sigma
 
@@ -24,14 +27,15 @@ def compute_V(evalues, evectors):
 
 
 def compute_U(matrix, S, V, n):
-    U = np.ndarray((n, n))
+    UT = np.zeros((len(S), len(matrix)))
 
-    for i in range(n):
-        vector = matrix.dot(V[i])
-        vector = (1 / S[i, i]) * vector
-        U[i] = vector
+    n, m = S.shape
 
-    U = U.T
+    for i in range(min(n, m)):
+        d = np.dot((1 / S[i, i]), matrix)
+        UT[i] = np.dot(d, V[i])
+
+    U = UT.T
 
     return U
 
@@ -61,10 +65,21 @@ def svd(matrix):
 
 
 if __name__ == "__main__":
+    # matrix = np.array([
+    #     [3.0, 2.0`, 8.0, 2.0, 0.0, -1.0, 3.0, 7.0],
+    #     [1, 2, 3, 4, 5, 6, 7, 8],
+    #     [8, ],
+    #     [1.0, 2.0, 7.0, 0.0, 0.0, -2.0, -21.0, 3.0]
+    # ])
     matrix = np.array([
-        [3.0, 2.0, 8.0, 2.0, 0.0, -1.0, 3.0, 7.0],
-        [1.0, 2.0, 7.0, 0.0, 0.0, -2.0, -21.0, 3.0]
+        [5, 53,],
+        [-1, 7],
+        [1, 2],
     ])
 
     u, s, v = svd(matrix)
+    # print(u)
+    # print(s)
+    # print(v)
+
     print(u.dot(s).dot(v.T))
