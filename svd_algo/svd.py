@@ -4,11 +4,19 @@ import math
 
 
 def compute_sigma(evalues, m, n):
+    """
+    Compute sigma(middle) matrix of SVD
+
+    :param evalues:
+    :param m:
+    :param n:
+    :return:
+    """
     sigma = np.zeros((m, n))
 
     for i in range(m):
         try:
-            sigma[i, i] = evalues[i]**0.5
+            sigma[i, i] = evalues[i] ** 0.5
         except IndexError as e:
             continue
 
@@ -16,6 +24,13 @@ def compute_sigma(evalues, m, n):
 
 
 def compute_V(evalues, evectors):
+    """
+    Compute V(right side matrix) of SVD
+
+    :param evalues:
+    :param evectors:
+    :return:
+    """
     evectors = evectors.T
 
     evalues, evectors = zip(*sorted(zip(evalues, evectors), reverse=True))
@@ -27,6 +42,15 @@ def compute_V(evalues, evectors):
 
 
 def compute_U(matrix, S, V, n):
+    """
+    Compute U(left side matrix) of SVD
+
+    :param matrix:
+    :param S:
+    :param V:
+    :param n:
+    :return:
+    """
     UT = np.zeros((len(S), len(matrix)))
 
     n, m = S.shape
@@ -41,6 +65,15 @@ def compute_U(matrix, S, V, n):
 
 
 def svd(matrix):
+    """
+    SVD decomposition algorithm
+    Decompose a given matrix to 3 matrices(U * sigma * V.T)
+    More here:
+    https://en.wikipedia.org/wiki/Singular-value_decomposition
+
+    :param matrix: np.array
+    :return: np.array, np.array, np.array
+    """
     n, m = matrix.shape
 
     # Compute eigenvalues of A * A(T)
@@ -64,22 +97,38 @@ def svd(matrix):
     return U, S, V.T
 
 
+def get_A_approximation(U, sigma, V, rank):
+    """
+    Return an matrix approximation of a specific rank
+    based on its SVD decomposition(U, sigma, V)
+
+    :param U:
+    :param sigma:
+    :param V:
+    :param rank:
+    :return:
+    """
+
+    a = np.matrix(U[:, :rank])
+    b = sigma[:rank]
+    b = b[:rank, :rank]
+    c = np.matrix(V[:rank, :])
+
+    approximation = np.matrix(a * b * c, dtype='float64')
+
+    return approximation
+
+
 if __name__ == "__main__":
-    # matrix = np.array([
-    #     [3.0, 2.0`, 8.0, 2.0, 0.0, -1.0, 3.0, 7.0],
-    #     [1, 2, 3, 4, 5, 6, 7, 8],
-    #     [8, ],
-    #     [1.0, 2.0, 7.0, 0.0, 0.0, -2.0, -21.0, 3.0]
-    # ])
     matrix = np.array([
-        [5, 53,],
+        [5, 53, ],
         [-1, 7],
         [1, 2],
     ])
 
-    # u, s, v = svd(matrix)
-    # print(u)
-    # print(s)
-    # print(v)
+    u, s, v = svd(matrix)
+    print(u)
+    print(s)
+    print(v)
 
-    # print(u.dot(s).dot(v.T))
+    print(u.dot(s).dot(v.T))
